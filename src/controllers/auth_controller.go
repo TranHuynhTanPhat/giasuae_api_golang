@@ -49,7 +49,7 @@ func (ctr *authController) LoginAdmin(cx *gin.Context) {
 		cx.AbortWithStatusJSON(http.StatusBadRequest, res)
 		return
 	} else if acc, ok := value.(entities.AccountWithToken); ok {
-		acc.Token = ctr.JWTService.GenerateToken(strconv.Itoa(acc.ID))
+		acc.Token = ctr.JWTService.GenerateTokenAdmin(strconv.Itoa(acc.ID))
 		res := helper.BuildResponse(true, "Đăng nhập thành công", acc)
 		cx.JSON(http.StatusOK, res)
 		return

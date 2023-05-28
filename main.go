@@ -7,7 +7,6 @@ import (
 	"giasuaeapi/src/repositories"
 	"giasuaeapi/src/services"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -74,7 +73,7 @@ func main() {
 
 	classRoutes := r.Group("v1/class")
 	{
-		classRoutes.GET("/index", middleware.AuthorJWT(jwtService), classController.FindAllClass)
+		classRoutes.GET("/index", classController.FindAllClass)
 		classRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), classController.InsertClass)
 		classRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), classController.DeleteClass)
 		classRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), classController.UpdateClass)
@@ -83,70 +82,70 @@ func main() {
 
 	categoryRoutes := r.Group("v1/category")
 	{
-		categoryRoutes.GET("/index", middleware.AuthorJWT(jwtService), categoryController.FindAllCategory)
+		categoryRoutes.GET("/index", categoryController.FindAllCategory)
 		categoryRoutes.GET("/id", middleware.AuthorJWT(jwtService), categoryController.FindByID)
 		categoryRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), categoryController.InsertCategory)
 		categoryRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), categoryController.UpdateCategory)
 		categoryRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), categoryController.DeleteCategory)
-		categoryRoutes.GET("/filter", middleware.AuthorJWT(jwtService), categoryController.FilterCategorry)
+		categoryRoutes.GET("/filter", categoryController.FilterCategorry)
 	}
 	accountRoutes := r.Group("v1/account")
 	{
-		accountRoutes.GET("/index", middleware.AuthorJWT(jwtService), accountController.FindAllAccount)
+		accountRoutes.GET("/index", accountController.FindAllAccount)
 		accountRoutes.GET("/id", middleware.AuthorJWT(jwtService), accountController.FindByID)
 		accountRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), accountController.DeleteAccount)
 		accountRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), accountController.UpdateAccount)
-		accountRoutes.GET("/filter", middleware.AuthorJWT(jwtService), accountController.FilterAccount)
+		accountRoutes.GET("/filter",  accountController.FilterAccount)
 		accountRoutes.POST("/password", middleware.AuthorJWTAdmin(jwtService), accountController.UpdatePassword)
 	}
 
 	newClassRoutes := r.Group("v1/new_class")
 	{
-		newClassRoutes.GET("/index", middleware.AuthorJWT(jwtService), newClassController.FindAllNewClass)
+		newClassRoutes.GET("/index", newClassController.FindAllNewClass)
 		newClassRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), newClassController.InsertNewClass)
 		newClassRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), newClassController.UpdateNewClass)
 		newClassRoutes.GET("/id", middleware.AuthorJWT(jwtService), newClassController.FindByID)
 		newClassRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), newClassController.DeleteNewClass)
-		newClassRoutes.GET("/filter", middleware.AuthorJWT(jwtService), newClassController.FilterNewClass)
+		newClassRoutes.GET("/filter", newClassController.FilterNewClass)
 		newClassRoutes.POST("/status", middleware.AuthorJWTAdmin(jwtService), newClassController.UpdateStatusNewClass)
 	}
 
 	postRoutes := r.Group("v1/post")
 	{
-		postRoutes.GET("/index", middleware.AuthorJWT(jwtService), postController.FindAllPost)
+		postRoutes.GET("/index", postController.FindAllPost)
 		postRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), postController.InsertPost)
 		postRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), postController.UpdatePost)
 		postRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), postController.DeletePost)
 		postRoutes.GET("/id", middleware.AuthorJWT(jwtService), postController.FindByID)
-		postRoutes.GET("/filter", middleware.AuthorJWT(jwtService), postController.FilterPost)
+		postRoutes.GET("/filter", postController.FilterPost)
 	}
 	transRoutes := r.Group("v1/trans")
 	{
-		transRoutes.GET("/index", middleware.AuthorJWTAdmin(jwtService), transController.FindAllTrans)
+		transRoutes.GET("/index",  transController.FindAllTrans)
 		transRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), transController.InsertTrans)
 		transRoutes.POST("/id", middleware.AuthorJWTAdmin(jwtService), transController.FindByIDAcc)
-		transRoutes.GET("/filter", middleware.AuthorJWTAdmin(jwtService), transController.FilterTrans)
+		transRoutes.GET("/filter", transController.FilterTrans)
 		transRoutes.GET("/statistical", middleware.AuthorJWTAdmin(jwtService), transController.Statistics)
 	}
 
 	salRoutes := r.Group("v1/salaryinfo")
 	{
-		salRoutes.GET("/index", middleware.AuthorJWT(jwtService), salaryinfoController.FindAllSalaryinfo)
+		salRoutes.GET("/index", salaryinfoController.FindAllSalaryinfo)
 		salRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), salaryinfoController.InsertSalaryinfo)
 		salRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), salaryinfoController.DeleteSalaryinfo)
 		salRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), salaryinfoController.UpdateSalaryinfo)
 		salRoutes.GET("/id", middleware.AuthorJWT(jwtService), salaryinfoController.FindByID)
-		salRoutes.GET("/filter", middleware.AuthorJWT(jwtService), salaryinfoController.FindByType)
+		salRoutes.GET("/filter", salaryinfoController.FindByType)
 	}
 
 	tutorRoutes := r.Group("v1/tutor")
 	{
-		tutorRoutes.GET("/index", middleware.AuthorJWT(jwtService), tutorController.FindAllTutor)
+		tutorRoutes.GET("/index", tutorController.FindAllTutor)
 		tutorRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), tutorController.InsertTutor)
 		tutorRoutes.GET("/id", middleware.AuthorJWT(jwtService), tutorController.FindByID)
 		tutorRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), tutorController.DeleteTutor)
 		tutorRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), tutorController.UpdateTutor)
-		tutorRoutes.GET("/filter", middleware.AuthorJWT(jwtService), tutorController.FilterTutor)
+		tutorRoutes.GET("/filter", tutorController.FilterTutor)
 	}
 
 	r.Run(":8100")
