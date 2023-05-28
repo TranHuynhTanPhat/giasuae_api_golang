@@ -55,7 +55,6 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "WELCOME TO GIASUANHEM ><"})
 	})
-    
 
 	authRoutes := r.Group("v1/auth")
 	{
@@ -69,7 +68,7 @@ func main() {
 		subjectRoutes.POST("/index", middleware.AuthorJWT(jwtService), subjectController.InsertSubject)
 		subjectRoutes.GET("/id", subjectController.FindByID)
 		subjectRoutes.POST("/edit", middleware.AuthorJWT(jwtService), subjectController.UpdateSubject)
-		subjectRoutes.POST("/remove", subjectController.DeleteSubject)
+		subjectRoutes.POST("/remove", middleware.AuthorJWT(jwtService), subjectController.DeleteSubject)
 	}
 
 	classRoutes := r.Group("v1/class")
@@ -88,7 +87,7 @@ func main() {
 		categoryRoutes.POST("/index", middleware.AuthorJWT(jwtService), categoryController.InsertCategory)
 		categoryRoutes.POST("/edit", middleware.AuthorJWT(jwtService), categoryController.UpdateCategory)
 		categoryRoutes.POST("/remove", middleware.AuthorJWT(jwtService), categoryController.DeleteCategory)
-		categoryRoutes.GET("/filter",categoryController.FilterCategorry)
+		categoryRoutes.GET("/filter",middleware.AuthorJWT(jwtService), categoryController.FilterCategorry)
 	}
 	accountRoutes := r.Group("v1/account")
 	{
