@@ -10,7 +10,9 @@ import (
 
 type JWTService interface {
 	GenerateToken(userID string) string
+	GenerateTokenAdmin(userID string) string
 	ValidateToken(token string) (*jwt.Token, error)
+	ValidateTokenAdmin(token string) (*jwt.Token, error)
 }
 
 type jwtCustomClaim struct {
@@ -40,6 +42,22 @@ func (jwts *jwtService) GenerateToken(userID string) string {
 	}
 	return tk
 }
+func (jwts *jwtService) GenerateTokenAdmin(userID string) string {
+	claims := &jwtCustomClaim{
+		userID,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().AddDate(1, 0, 0).Unix(),
+			Issuer:    jwts.issuer,
+			IssuedAt:  time.Now().Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
+	tk, err := token.SignedString([]byte(GetSecretKey("SECRET_ADMIN")))
+	if err != nil {
+		panic(err.Error())
+	}
+	return tk
+}
 
 // ValidateToken implements JWTService
 // Xác thực token
@@ -51,11 +69,19 @@ func (jwts *jwtService) ValidateToken(token string) (*jwt.Token, error) {
 		return []byte(jwts.secretKey), nil
 	})
 }
+func (jwts *jwtService) ValidateTokenAdmin(token string) (*jwt.Token, error) {
+	return jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method %v", t.Header["alg"])
+		}
+		return []byte(GetSecretKey("SECRET_ADMIN")), nil
+	})
+}
 
 func NewJWTService() JWTService {
 	return &jwtService{
 		issuer:    os.Getenv("ISSUER"),
-		secretKey: GetSecretKey("SECRET_ADMIN"),
+		secretKey: GetSecretKey("SECRET_USER"),
 	}
 }
 
