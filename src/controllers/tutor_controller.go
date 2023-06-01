@@ -5,6 +5,8 @@ import (
 	"giasuaeapi/src/entities"
 	"giasuaeapi/src/helper"
 	"giasuaeapi/src/services"
+
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -108,6 +110,10 @@ func (ctrl *tutorController) InsertTutor(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, res)
 		return
 	}
+	tutor.Address=template.HTMLEscapeString(tutor.Address)
+	tutor.Describe=template.HTMLEscapeString(tutor.Describe)
+	tutor.Name=template.HTMLEscapeString(tutor.Name)
+	tutor.Phone=template.HTMLEscapeString(tutor.Phone)
 	err2 := ctrl.TutorService.InsertTutor(&tutor)
 	if err2 != nil {
 		res := helper.BuildResponseError("Mỗi tài khoản chỉ tạo được một gia sư", err2.Error(), helper.EmptyObjec{})

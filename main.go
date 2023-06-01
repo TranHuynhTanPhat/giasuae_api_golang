@@ -7,6 +7,7 @@ import (
 	"giasuaeapi/src/repositories"
 	"giasuaeapi/src/services"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -83,7 +84,7 @@ func main() {
 	categoryRoutes := r.Group("v1/category")
 	{
 		categoryRoutes.GET("/index", categoryController.FindAllCategory)
-		categoryRoutes.GET("/id", middleware.AuthorJWT(jwtService), categoryController.FindByID)
+		categoryRoutes.GET("/id", categoryController.FindByID)
 		categoryRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), categoryController.InsertCategory)
 		categoryRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), categoryController.UpdateCategory)
 		categoryRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), categoryController.DeleteCategory)
@@ -94,8 +95,8 @@ func main() {
 		accountRoutes.GET("/index", accountController.FindAllAccount)
 		accountRoutes.GET("/id", middleware.AuthorJWT(jwtService), accountController.FindByID)
 		accountRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), accountController.DeleteAccount)
-		accountRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), accountController.UpdateAccount)
-		accountRoutes.GET("/filter",  accountController.FilterAccount)
+		accountRoutes.POST("/edit", accountController.UpdateAccount)
+		accountRoutes.GET("/filter", accountController.FilterAccount)
 		accountRoutes.POST("/password", middleware.AuthorJWTAdmin(jwtService), accountController.UpdatePassword)
 	}
 
@@ -116,12 +117,12 @@ func main() {
 		postRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), postController.InsertPost)
 		postRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), postController.UpdatePost)
 		postRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), postController.DeletePost)
-		postRoutes.GET("/id", middleware.AuthorJWT(jwtService), postController.FindByID)
+		postRoutes.GET("/id", middleware.AuthorJWTAdmin(jwtService), postController.FindByID)
 		postRoutes.GET("/filter", postController.FilterPost)
 	}
 	transRoutes := r.Group("v1/trans")
 	{
-		transRoutes.GET("/index",  transController.FindAllTrans)
+		transRoutes.GET("/index", transController.FindAllTrans)
 		transRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), transController.InsertTrans)
 		transRoutes.POST("/id", middleware.AuthorJWTAdmin(jwtService), transController.FindByIDAcc)
 		transRoutes.GET("/filter", transController.FilterTrans)
@@ -141,7 +142,7 @@ func main() {
 	tutorRoutes := r.Group("v1/tutor")
 	{
 		tutorRoutes.GET("/index", tutorController.FindAllTutor)
-		tutorRoutes.POST("/index", middleware.AuthorJWTAdmin(jwtService), tutorController.InsertTutor)
+		tutorRoutes.POST("/index", tutorController.InsertTutor)
 		tutorRoutes.GET("/id", middleware.AuthorJWT(jwtService), tutorController.FindByID)
 		tutorRoutes.POST("/remove", middleware.AuthorJWTAdmin(jwtService), tutorController.DeleteTutor)
 		tutorRoutes.POST("/edit", middleware.AuthorJWTAdmin(jwtService), tutorController.UpdateTutor)

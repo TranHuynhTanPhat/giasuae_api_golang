@@ -5,6 +5,7 @@ import (
 	"giasuaeapi/src/entities"
 	"giasuaeapi/src/helper"
 	"giasuaeapi/src/services"
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -85,6 +86,8 @@ func (ctrl *postController) InsertPost(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, res)
 		return
 	}
+	post.Title = template.HTMLEscapeString(post.Title)
+	post.Body = template.HTMLEscapeString(post.Body)
 	errsub := ctrl.PostService.InsertPost(&post)
 	if errsub != nil {
 		res := helper.BuildResponseError("Thêm bài viết thất bại", errsub.Error(), helper.EmptyObjec{})
@@ -105,6 +108,8 @@ func (ctrl *postController) UpdatePost(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, res)
 		return
 	}
+	post.Title = template.HTMLEscapeString(post.Title)
+	post.Body = template.HTMLEscapeString(post.Body)
 	ctrl.PostService.UpdatePost(&post)
 	res := helper.BuildResponse(true, "OK", nil)
 	context.JSON(http.StatusOK, res)

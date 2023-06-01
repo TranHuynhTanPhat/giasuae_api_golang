@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"giasuaeapi/src/date_picker"
 	"giasuaeapi/src/entities"
 	"giasuaeapi/src/helper"
@@ -103,6 +104,8 @@ func (ctrl *accountController) InsertAccount(context *gin.Context) {
 
 // UpdateAccount implements AccountController
 func (ctrl *accountController) UpdateAccount(context *gin.Context) {
+	fmt.Print("acc.Username")
+
 	var acc entities.Account
 	err := context.ShouldBind(&acc)
 	if err != nil {

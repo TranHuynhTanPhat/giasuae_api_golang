@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"giasuaeapi/src/entities"
 	"log"
+	// "regexp"
+	"strings"
 
 	"github.com/mashingan/smapping"
 
@@ -51,6 +53,7 @@ func (db *accountReponsitory) FilterAccount(username string, isTutor int) []enti
 func (db *accountReponsitory) VerifyCredential(username string) interface{} {
 	var acc entities.Account
 	accToken := entities.AccountWithToken{}
+
 	res := db.connection.Where("username = ?", username).Take(&acc)
 	fmt.Println(acc)
 	if res.Error == nil {
@@ -85,10 +88,21 @@ func (db *accountReponsitory) FindAllAccount() []entities.Account {
 // InsertAccount implements AccountReponsitory
 func (db *accountReponsitory) InsertAccount(acc *entities.Account) error {
 	acc.Password = hashPass([]byte(acc.Password))
+	acc.Username = strings.TrimSpace(acc.Username)
+
+	// // Định nghĩa biểu thức chính quy để kiểm tra ký tự đặc biệt
+	// regex := `[!@#$%^&*(),.?/\"';:{}|<>]+-_~=`
+
+	// // Tạo đối tượng regex từ biểu thức chính quy
+	// re := regexp.MustCompile(regex)
+
+	// // Check if the string contains any special characters
+	// if !re.MatchString(acc.Username) && !strings.Contains(acc.Username, " ") && !strings.Contains(acc.Username, "=") && acc.Username != "" {
 	err := db.connection.Save(&acc)
 	if err.Error != nil {
 		return err.Error
 	}
+	// }
 	return nil
 }
 
